@@ -175,8 +175,8 @@
 					"Remove": {
 						className: "btn-danger",
 						callback: function() {
-							$.post("components/delete_photo_handler.php", function(){
-								$(".edit_profile_user_photo").attr("src","/pic/photos/def.jpg");
+							$.post("PhotoDeleteServlet", function(){
+								$(".edit_profile_user_photo").attr("src","pic/photos/def.jpg");
 							});
 						}
 					},

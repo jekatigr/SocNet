@@ -7,4 +7,12 @@
       <servlet-name>PhotoUploadServlet</servlet-name>
       <url-pattern>/PhotoUploadServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PhotoDeleteServlet</servlet-name>
+        <servlet-class>net.soc.PhotoDeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>PhotoDeleteServlet</servlet-name>
+      <url-pattern>/PhotoDeleteServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
