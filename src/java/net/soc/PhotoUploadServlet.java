@@ -20,7 +20,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class PhotoUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String DATA_DIRECTORY = "photo";
+    private static final String DATA_DIRECTORY = "pic/photos";
     private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 10;
     private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 5;
     
