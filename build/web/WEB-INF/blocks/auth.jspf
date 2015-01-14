@@ -1,5 +1,0 @@
-<%@ page pageEncoding="UTF-8" %>
-<jsp:useBean id="authBean" class="net.soc.AuthBean" scope="application"/>
-<% 
-    boolean auth = authBean.checkAuth(session.getAttribute("id"), session.getAttribute("hash"));
-%>
