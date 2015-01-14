@@ -28,7 +28,13 @@ public class AuthBean {
         if (id_o != null && hash_o != null) {
             int id = Integer.parseInt(String.valueOf(id_o));
             String hash = String.valueOf(hash_o);
+            return checkAuth(id, hash);
+        }
+        return false;
+    }
             
+    public boolean checkAuth(int id, String hash) {
+        if (hash != null) {
             Connection con = null;
             Statement st = null;
             ResultSet rs = null;
