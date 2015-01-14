@@ -1,0 +1,10 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+    <servlet>
+        <servlet-name>PhotoUploadServlet</servlet-name>
+        <servlet-class>net.soc.PhotoUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>PhotoUploadServlet</servlet-name>
+      <url-pattern>/PhotoUploadServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
