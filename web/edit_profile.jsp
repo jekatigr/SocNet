@@ -44,7 +44,7 @@
                         </div>
                         <div style="clear:both;"></div>
                     <% session.removeAttribute("photo_upload_error"); } %>
-                    <% if (session.getAttribute("photo_upload") != null) { %>
+                    <% if (session.getAttribute("photo_upload_success") != null) { %>
                         <div class="alert alert-success col-md-offset-3 col-md-7 alert-dismissible fade in">
                             <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;<strong>Success!</strong> New photo is uploaded.
                             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>

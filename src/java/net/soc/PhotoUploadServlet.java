@@ -1,17 +1,25 @@
 package net.soc;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jdk.nashorn.internal.runtime.Version;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -74,6 +82,11 @@ public class PhotoUploadServlet extends HttpServlet {
 
                         if (!item.isFormField()) {
                             String fileName = new File(item.getName()).getName();
+                            if (fileName.contains(".")) {
+                                fileName = user_id + fileName.substring(fileName.lastIndexOf("."), fileName.length());
+                            } else {
+                                fileName = user_id + "";
+                            }
                             String filePath = uploadFolder + File.separator + fileName;
 
                             String ct = item.getContentType();
@@ -87,7 +100,12 @@ public class PhotoUploadServlet extends HttpServlet {
                                     // saves the file to upload directory
                                     item.write(uploadedFile);
                                     File f = prepareImageForAvatar(filePath);
-                                    session.setAttribute("photo_upload_success", true);
+                                    
+                                    if (saveNewAvatarInDB(user_id, fileName)) {
+                                        session.setAttribute("photo_upload_success", true);
+                                    } else {
+                                        session.setAttribute("photo_upload_error", "Internal error! Please, try again.");
+                                    }
                                 } else {
                                     session.setAttribute("photo_upload_error", "Uploaded file is too big!");
                                 }
@@ -130,5 +148,31 @@ public class PhotoUploadServlet extends HttpServlet {
     	g.drawImage(in, 0, 0, 400, 400, null); 
     	g.dispose();
     	return scaledBI;
+    }
+
+    private boolean saveNewAvatarInDB(int user_id, String fileName) {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
+            st = (Statement) con.createStatement();
+            st.executeUpdate("UPDATE profiles SET photo='"+ fileName +"' WHERE id='"+ user_id +"'");
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) { rs.close(); }
+                if (st != null) { st.close(); }
+                if (con != null) { con.close(); }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(Version.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return false;
     }
 }
