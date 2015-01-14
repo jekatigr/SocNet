@@ -37,13 +37,21 @@
                         </div>
                         <div style="clear:both;"></div>
                     <% session.removeAttribute("edit_profile_error"); } %>
-                    <% if (session.getAttribute("login_success") != null) { %>
-                        <div class="alert alert-success col-md-offset-3 col-md-7 alert-dismissible fade in">
-                            <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;<strong>You've completely logged in!</strong>
+                    <% if (session.getAttribute("photo_upload_error") != null) { %>
+                        <div class="alert alert-danger col-md-offset-3 col-md-7 alert-dismissible fade in">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;<strong><%= session.getAttribute("photo_upload_error") %></strong>
                             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
                         </div>
                         <div style="clear:both;"></div>
-                    <% session.removeAttribute("login_success"); } %>
+                    <% session.removeAttribute("photo_upload_error"); } %>
+                    <% if (session.getAttribute("photo_upload") != null) { %>
+                        <div class="alert alert-success col-md-offset-3 col-md-7 alert-dismissible fade in">
+                            <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;<strong>Success!</strong> New photo is uploaded.
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
+                        </div>
+                        <div style="clear:both;"></div>
+                    <% session.removeAttribute("photo_upload_success"); } %>
+                    
                     
                     <div class="panel panel-info">
                         <div class="panel-heading">
