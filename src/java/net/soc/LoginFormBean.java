@@ -15,7 +15,7 @@ public class LoginFormBean {
     private int id;
     private String login;
     private String pass;
-    /** В хэше будет храниться переменная сессии ( == md5(md5(пароль_пользователя)) ).  */
+    /** В хэше будет храниться переменная сессии ( == md5(md5(login + пароль_пользователя)) ).  */
     private String hash;
     
     
@@ -66,7 +66,7 @@ public class LoginFormBean {
             st = (Statement) con.createStatement();
             rs = st.executeQuery("SELECT id, password FROM users WHERE login='" + login + "'");
             if (rs.next()) {
-                if (rs.getString(2).equals(AuthBean.md5(password))) {
+                if (rs.getString(2).equals(AuthBean.md5(login + password))) {
                     this.id = rs.getInt(1);
                     this.hash = AuthBean.md5(rs.getString(2));
                     return true;

@@ -7,6 +7,7 @@
 <%
 if (auth) {
     formHandler.setId(Integer.parseInt(session.getAttribute("id").toString()));
+    formHandler.setLogin(session.getAttribute("login").toString());
     if (formHandler.savePass()) {
         session.setAttribute("password_changed_success", true);
         session.setAttribute("hash", formHandler.getHash());

@@ -19,7 +19,6 @@ public class RegFormBean {
     private String login;
     private String pass;
     private String pass2;
-    private String hash;
     
     private HashMap<String, String> errors = new HashMap<>();
     
@@ -60,7 +59,7 @@ public class RegFormBean {
     }
     
     public String getHash() {
-        return AuthBean.md5(AuthBean.md5(this.getPass()));
+        return AuthBean.md5(AuthBean.md5(this.getLogin() + this.getPass()));
     }
     
     
@@ -128,7 +127,7 @@ public class RegFormBean {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            st.executeUpdate("INSERT INTO users (login, password) VALUES ('"+ this.getLogin() +"', '"+ AuthBean.md5(this.getPass()) +"')");
+            st.executeUpdate("INSERT INTO users (login, password) VALUES ('"+ this.getLogin() +"', '"+ AuthBean.md5(this.getLogin() + this.getPass()) +"')");
             rs = st.executeQuery("SELECT id FROM users WHERE login='" + this.getLogin() + "'");
             if (rs.next()) {
                 this.setId(rs.getInt(1));

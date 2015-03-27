@@ -22,6 +22,7 @@ import jdk.nashorn.internal.runtime.Version;
  */
 public class EditPassBean {
     private int id;
+    private String login;
     private String oldpass;
     private String pass;
     private String pass2;
@@ -39,6 +40,17 @@ public class EditPassBean {
      */
     public void setId(int id) {
         this.id = id;
+    }
+    
+     /**
+     * @param login the login to set
+     */
+    public void setLogin(String login) {
+        this.login = login;
+    }
+    
+    public String getLogin() {
+        return this.login;
     }
     
     public String getOldpass() {
@@ -70,12 +82,12 @@ public class EditPassBean {
     }
     
     public String getHash() {
-        return AuthBean.md5(AuthBean.md5(this.getPass()));
+        return AuthBean.md5(AuthBean.md5(this.getLogin() + this.getPass()));
     }
 
     
     public boolean savePass() {
-        if (new AuthBean().checkAuth(this.getId(), AuthBean.md5(AuthBean.md5(this.getOldpass())))) {
+        if (new AuthBean().checkAuth(this.getId(), AuthBean.md5(AuthBean.md5(this.getLogin() + this.getOldpass())))) {
             if (this.getPass() != null && this.getPass().length() > 5) { 
                 if (AuthBean.md5(this.getPass()).equals(AuthBean.md5(this.getPass2()))) {
                     Connection con = null;
@@ -86,7 +98,7 @@ public class EditPassBean {
                         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
                         con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
                         st = (Statement) con.createStatement();
-                        st.executeUpdate("UPDATE users SET password='"+ AuthBean.md5(this.getPass()) +"' WHERE id='"+ this.getId() +"'");
+                        st.executeUpdate("UPDATE users SET password='"+ AuthBean.md5(this.getLogin() + this.getPass()) +"' WHERE id='"+ this.getId() +"'");
                         return true;
                     } catch (SQLException ex) {
                         System.out.println(ex.getMessage());

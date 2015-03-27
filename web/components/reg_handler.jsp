@@ -8,6 +8,7 @@ if (formHandler.validate()) {
         session.setAttribute("reg_success", true);
         response.sendRedirect("../index.jsp");
         session.setAttribute("id", formHandler.getId());
+        session.setAttribute("login", formHandler.getLogin());
         session.setAttribute("hash", formHandler.getHash());
     } else {
         session.setAttribute("reg_error", true);
