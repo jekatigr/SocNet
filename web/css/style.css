@@ -15,6 +15,16 @@
 	margin: 0px auto 17px auto;
 }
 
+.add_post_button {
+	text-align: center;
+	margin: 20px 0px;
+}
+.post_textarea {
+	margin-top: 20px;
+}
+.post_button {
+	margin-top: 10px;
+}
 .post_user_avatar {
 	max-width: 90px;
 	width: 70px;
