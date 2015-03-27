@@ -95,7 +95,75 @@
                                                 </div>
                                         </div>
                                         <hr>
-                                        user's posts here
+                                        <% /* =======================     тут заготовка интерфейса      ====================== */ %>
+                                        <div class="row">
+                                            <div class="col-md-12 col-md-offset-0">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                            <div class="post_img pull-left">
+                                                                <a href="index.jsp?p=16"><img class="post_user_avatar" src="pic/photos/def.jpg"></a>
+                                                            </div>
+                                                            <div class="post_body">
+                                                                    <div>
+                                                                        <div class="pull-left">
+                                                                            <span class="glyphicon glyphicon-user"></span>
+                                                                            <a href="index.jsp?p=16">Имя Фамилия</a>
+                                                                        </div>
+                                                                        <div class="pull-right">
+                                                                            <span class="glyphicon glyphicon-time"></span> 01:22 &#x2015; 28.03.2015 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="clear: right;"></div>
+                                                                    <div class="well well-sm post_well">
+                                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.							
+                                                                    </div>
+                                                                    <div class="pull-right">
+                                                                        <a class="btn btn-primary btn-xs add_comment_button_js"><span class="glyphicon glyphicon-share-alt"></span> Ответить</a>
+                                                                    </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-md-offset-0">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                            <div class="post_img pull-left">
+                                                                <a href="index.jsp?p=16"><img class="post_user_avatar" src="pic/photos/def.jpg"></a>
+                                                            </div>
+                                                            <div class="post_body">
+                                                                    <div>
+                                                                        <div class="pull-left">
+                                                                            <span class="glyphicon glyphicon-user"></span>
+                                                                            <a href="index.jsp?p=16">Имя Фамилия</a>
+                                                                        </div>
+                                                                        <div class="pull-right">
+                                                                            <span class="glyphicon glyphicon-time"></span> 01:22 &#x2015; 28.03.2015 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="clear: right;"></div>
+                                                                    <div class="well well-sm post_well">
+                                                                            Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum. Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.																
+                                                                    </div>
+                                                                    <div class="pull-right">
+                                                                        <a class="btn btn-primary btn-xs add_comment_button_js"><span class="glyphicon glyphicon-share-alt"></span> Ответить</a>
+                                                                    </div>
+                                                            </div>
+                                                            <div class="reply-field reply-field-2">
+
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                                                                                        
+													                                 
                                 </div>
                             </div>
             <% } else { %>
@@ -111,7 +179,7 @@
                                         <img class="profile_user_avatar" src="pic/photos/def.jpg">
                                     </div>
                                     <div class="col-md-5">
-                                        <h3>Such user doesn't exists!</h3>
+                                        <h3>Such user doesn't exist!</h3>
                                     </div>
                             </div>
                     </div>

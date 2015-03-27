@@ -14,3 +14,17 @@
 .input_photo_file {
 	margin: 0px auto 17px auto;
 }
+
+.post_user_avatar {
+	max-width: 90px;
+	width: 70px;
+	height: 70px;
+	border-radius: 8px;
+}
+.post_body {
+	margin-left: 80px;
+}
+.post_well {
+	margin-bottom: 5px;
+	min-height: 70px;
+}

@@ -192,7 +192,7 @@
 		$("#inputBirthday").focus(function(){
                     $(this).datepicker('show');
 		});
-		$("#inputAbout").focus(function(){
+		$("#inputSex").focus(function(){
                     $("#inputBirthday").datepicker('hide');
 		});
 	});
