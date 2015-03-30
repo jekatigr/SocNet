@@ -6,9 +6,11 @@
 <jsp:useBean id="profileBean" class="net.soc.ProfileBean" scope="application"/>
 <% //определяем, какой профайл открыт и загружаем его
     Profile p = null;
+    boolean myprofile = false;
     if(auth) {
         if (request.getParameter("p") == null || request.getParameter("p") == session.getAttribute("id")) {
             p = profileBean.load(Integer.parseInt(session.getAttribute("id").toString()));
+            myprofile = true;
         } else {
             p = profileBean.load(Integer.parseInt(request.getParameter("p").toString()));
         }
@@ -30,7 +32,7 @@
                 <div class="col-md-12">
         
                     <% if (auth) { /* если пользователь залогинен */
-                        if (p != null) { %>
+                        if (p != null) { /* пользователь с таким id существует */ %>
                             <% if (session.getAttribute("reg_success") != null) { %>
                                 <div class="alert alert-success col-md-offset-3 col-md-7 alert-dismissible fade in">
                                     <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;<strong>Congrads!</strong> Registration complete.
@@ -63,7 +65,9 @@
                                 <div class="panel-heading">
                                         <h3 class="panel-title text-center">
                                             <span class="lead"><span class="glyphicon glyphicon-user"></span> <%= p.getName() %></span>	
-                                            <a class="btn btn-default pull-right button_delete_avatar" href="edit_profile.jsp">Edit profile</a>	
+                                            <% if (myprofile) { %>
+                                                <a class="btn btn-default pull-right button_delete_avatar" href="edit_profile.jsp">Edit profile</a>	
+                                            <% } %>
                                         </h3>
                                 </div>
                                 <div class="panel-body">
@@ -191,7 +195,7 @@
 													                                 
                                 </div>
                             </div>
-            <% } else { %>
+            <% } else { /* пользователя не существует */ %>
                  <div class="panel panel-info">
                     <div class="panel-heading">
                             <h3 class="panel-title text-center">
@@ -210,7 +214,7 @@
                     </div>
                 </div>
             <% } %>
-        <% } else { %>
+        <% } else { /* пользователь не залогинен */ %>
             <div class="jumbotron">
                 <h1>Welcome!</h1>
                 <hr>
