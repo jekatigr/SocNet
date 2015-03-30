@@ -11,6 +11,7 @@
     } 
     if (p == null) {
         response.sendRedirect("index.jsp");
+        throw new javax.servlet.jsp.SkipPageException();
     }
 %>
 
