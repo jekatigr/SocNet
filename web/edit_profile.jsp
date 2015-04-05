@@ -3,14 +3,16 @@
 
 <%@include file="WEB-INF/blocks/auth.jspf" %>
 
-<jsp:useBean id="profileBean" class="net.soc.ProfileBean" scope="application"/>
+
 <% //определяем, какой профайл открыт и загружаем его
-    Profile p = null;
+    Profile p = new Profile();
+    boolean load = false;
     if(auth) {
-        p = profileBean.load(Integer.parseInt(session.getAttribute("id").toString()));        
+         load = p.load(Integer.parseInt(session.getAttribute("id").toString()));        
     } 
-    if (p == null) {
+    if (!load) {
         response.sendRedirect("index.jsp");
+        throw new javax.servlet.jsp.SkipPageException();
     }
 %>
 

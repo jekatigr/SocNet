@@ -8,10 +8,11 @@
 <% //определяем, какой профайл открыт и загружаем его
     Profile p = new Profile();
     boolean load = false;
+    boolean myprofile = false;
     if(auth) {
         if (request.getParameter("p") == null || request.getParameter("p") == session.getAttribute("id")) {
             load = p.load(Integer.parseInt(session.getAttribute("id").toString()));
-            
+            myprofile = true;
         } else {
             load = p.load(Integer.parseInt(request.getParameter("p").toString()));
         }
@@ -66,7 +67,9 @@
                                 <div class="panel-heading">
                                         <h3 class="panel-title text-center">
                                             <span class="lead"><span class="glyphicon glyphicon-user"></span> <%= p.getName() %></span>	
-                                            <a class="btn btn-default pull-right button_delete_avatar" href="edit_profile.jsp">Edit profile</a>	
+                                            <% if (myprofile) { %>
+                                                <a class="btn btn-default pull-right button_delete_avatar" href="edit_profile.jsp">Edit profile</a>	
+                                            <% } %>
                                         </h3>
                                 </div>
                                 <div class="panel-body">
@@ -163,7 +166,7 @@
                                     </div>
                                 </div>
                             </div>
-            <% } else { %>
+            <% } else { /* пользователя не существует */ %>
                  <div class="panel panel-info">
                     <div class="panel-heading">
                             <h3 class="panel-title text-center">
@@ -182,7 +185,7 @@
                     </div>
                 </div>
             <% } %>
-        <% } else { %>
+        <% } else { /* пользователь не залогинен */ %>
             <div class="jumbotron">
                 <h1>Welcome!</h1>
                 <hr>
