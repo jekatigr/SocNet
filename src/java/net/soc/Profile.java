@@ -6,7 +6,18 @@
 
 package net.soc;
 
-import java.util.Date;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Driver;
+import com.mysql.jdbc.Statement;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jdk.nashorn.internal.runtime.Version;
 
 /**
  *
@@ -23,7 +34,9 @@ public class Profile {
     private String country;
     private String city;
     private String about;
-
+    private List<String> posts = new ArrayList<>();
+    private List<Integer> id_posters = new ArrayList<>();  //person who write post (if user writes it himself, id = id_poster)
+    private List<Timestamp> times = new ArrayList<>();
     /**
      * @return the id
      */
@@ -197,4 +210,75 @@ public class Profile {
     public boolean getSex() {
         return this.sex;
     }
+    
+    
+    public String getPost(int i) {
+        return posts.get(i);
+    }
+
+    public void setPost(String post) {
+        posts.add(post);
+    }
+
+    public Integer getId_poster(int i) {
+        return id_posters.get(i);
+    }
+
+    public void setId_poster(Integer id_poster) {
+        id_posters.add(id_poster);
+    }
+
+    public Timestamp getTime(int i) {
+        return times.get(i);
+    }
+
+    public void setTime(Timestamp time) {
+        times.add(time);
+    }
+    
+    public List<String> getPosts() {
+        return posts;
+    }
+    
+    public  boolean load(int id) {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        try {
+            DriverManager.registerDriver(new Driver());
+            con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery("SELECT users.login, profiles.id, profiles.first_name, "
+                    + "profiles.last_name, profiles.photo, profiles.sex, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
+                    + "profiles.country, profiles.city, profiles.about FROM users INNER JOIN profiles ON profiles.id = users.id WHERE users.id='" + id + "'");
+            if (rs.next()) {
+                setId(id);
+                setLogin(rs.getString(1));
+                setFirst_name(rs.getString(3));
+                setLast_name(rs.getString(4));
+                setPhoto(rs.getString(5));
+                setSex(rs.getString(6).equals("1"));
+                setBirthday(rs.getString(7));
+                setCountry(rs.getString(8));
+                setCity(rs.getString(9));
+                setAbout(rs.getString(10));
+                return true;
+            }
+            return false;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) { rs.close(); }
+                if (st != null) { st.close(); }
+                if (con != null) { con.close(); }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(Version.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return false;
+    }
+
 }
