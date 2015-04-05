@@ -5,7 +5,6 @@
  */
 
 package net.soc;
-
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Driver;
 import com.mysql.jdbc.Statement;
@@ -40,6 +39,8 @@ public class AuthBean {
             ResultSet rs = null;
 
             try {
+                
+            System.out.println("in checkAuth");
                 DriverManager.registerDriver(new Driver());
                 con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
                 st = (Statement) con.createStatement();

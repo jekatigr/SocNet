@@ -77,6 +77,32 @@ INSERT INTO `users` VALUES (1,'jekatigr','0abf0076ec5f741db3189885a9acca6b'),(2,
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `text` varchar(300) DEFAULT NULL,
+  `date` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+set @@session.time_zone='+00:00';
+SET SESSION sql_mode='ALLOW_INVALID_DATES';
+INSERT INTO `posts` VALUES (1,1,'1 Post', '2009-06-04 22:00:00'),(2,1,'2nd Post', '2014-12-31 00:00:00');
+UNLOCK TABLES;
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
