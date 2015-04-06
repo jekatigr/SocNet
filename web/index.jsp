@@ -125,7 +125,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <% for (int i = 0; i< p.getPosts().size(); i++) { %>
+                                        <% for (int i = 0; i < p.getPosts().size(); i++) { %>
                                             <hr>
                                             <div class="row">
                                                 <div class="col-md-12 col-md-offset-0">

@@ -38,3 +38,17 @@
 	margin-bottom: 5px;
 	min-height: 70px;
 }
+
+.people_user_info_table {
+	margin: 20px;
+}
+.people_table_td {
+	padding: 10px;
+}
+.people_user_avatar {
+	height: 120px;
+	width: 120px;
+	border: 1px solid #dddddd;
+	border-radius: 12px;
+	margin: 20px auto;
+}

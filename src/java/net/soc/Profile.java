@@ -240,7 +240,7 @@ public class Profile {
         return posts;
     }
     
-    public  boolean load(int id) {
+    public boolean load(int id) {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
