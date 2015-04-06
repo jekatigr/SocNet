@@ -19,11 +19,12 @@
     <body>
         <%@include file="WEB-INF/blocks/menu.jspf" %>
         <!-- Тело документа -->
+        <ul class="list-group">
         <%
             for(int i = 0; i < list.size(); i++) {
                 Profile p = list.get(i);
                 %>
-                    <div class="panel-body">
+                    <li class="list-group-item">
                         <div class="row">
                                 <div class="col-md-2 col-md-offset-4">
                                     <a href="index.jsp?p=<%= p.getId() %>">
@@ -47,10 +48,10 @@
                                         </table>
                                 </div>
                         </div>
-                    </div>
-                    <hr>
+                    </li>
                 <%
             }
         %>
+        </ul>
     </body>
 </html>
