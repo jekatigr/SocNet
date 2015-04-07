@@ -1,5 +1,5 @@
 /nbproject/
 /build/
-/dist/
 .gitignore
+/dist/
 /src/java/net/soc/DBConnect.java
