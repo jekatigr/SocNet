@@ -15,4 +15,12 @@
       <servlet-name>PhotoDeleteServlet</servlet-name>
       <url-pattern>/PhotoDeleteServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PostDeleteServlet</servlet-name>
+        <servlet-class>net.soc.PostDeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>PostDeleteServlet</servlet-name>
+      <url-pattern>/PostDeleteServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

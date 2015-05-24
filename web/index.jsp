@@ -3,8 +3,6 @@
 
 <%@include file="WEB-INF/blocks/auth.jspf" %>
 
-
-<jsp:useBean id="postdownloadBean" class="net.soc.PostDownloadBean" scope="application"/>
 <% //определяем, какой профайл открыт и загружаем его
     Profile p = new Profile();
     boolean load = false;
@@ -25,6 +23,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Welcome to the SocNet!</title>
         <%@include file="WEB-INF/blocks/includes.jspf" %>
+        <script type="text/javascript" src="js/bootbox.min.js"></script>
     </head>
     <body>
         <%@include file="WEB-INF/blocks/menu.jspf" %>
@@ -101,21 +100,14 @@
                                                 </div>
                                         </div>
                                         <hr>
-                                        <% /* =======================     тут заготовка интерфейса      ====================== */ %>
-                                        <div class="add_post_button">
-                                            <button class="btn btn-primary btn-lg add_comment_button_js">
-                                            <span class="glyphicon glyphicon-comment"></span> 
-                                            Add post
-                                            </button>
-                                        </div>
+                                        <a name="add_post_form"></a>
                                         <div>
                                             <div class="post-field">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <form accept-charset="UTF-8" action="components/add_post.jsp" method="POST">
-                                                            <textarea class="form-control animated post_textarea" name="post" placeholder="Your text here..." rows="5"></textarea>
-                                                            <input type="hidden" name="uid" value="16"><%/* здесь id пользователя, на чьей странице пост */%>
-                                                            <input type="hidden" name="id" value="16"><%/* здесь id пользователя, на чьей странице пост */%>
+                                                            <textarea class="form-control animated post_textarea" name="text" placeholder="Your text here..." rows="5"></textarea>
+                                                            <input type="hidden" name="receiverId" value="<%= p.getId() %>">
                                                             
                                                             <div class="text-right">
                                                                 <button class="btn btn-success btn-lg post_button" type="submit"><span class="glyphicon glyphicon-send"></span> Post it</button>
@@ -125,41 +117,50 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <a name="posts"></a>
                                         <% for (int i = 0; i < p.getPosts().size(); i++) { %>
+                                        <div class="post-<%= p.getPosts().get(i).getId() %>">
                                             <hr>
                                             <div class="row">
-                                                <div class="col-md-12 col-md-offset-0">
+                                                <div class="col-md-10 col-md-offset-1">
                                                     <div class="panel panel-info">
                                                         <div class="panel-body">
                                                                
                                                                 <div class="post_img pull-left">
-                                                                    <img class="profile_user_avatar" src="pic/photos/<%= p.getPhoto() %>">
+                                                                    <a href="index.jsp?p=<%= p.getPosts().get(i).getAuthorId() %>">
+                                                                        <img class="post_user_avatar" src="pic/photos/<%= p.getPosts().get(i).getAuthorPhoto() %>">
+                                                                    </a>
                                                                 </div>
                                                                 <div class="post_body">
                                                                         <div>
                                                                             <div class="pull-left">
-                                                                                <span class="glyphicon glyphicon-user">  <%= p.getName() %></span>
-                                                                                
+                                                                                <a href="index.jsp?p=<%= p.getPosts().get(i).getAuthorId() %>">
+                                                                                    <span class="glyphicon glyphicon-user">  <%= p.getPosts().get(i).getAuthorName() %></span>
+                                                                                </a>
                                                                             </div>
                                                                             <div class="pull-right">
-                                                                                <span class="glyphicon glyphicon-time"> <%= p.getTime(i) %> </span>
+                                                                                <span class="glyphicon glyphicon-time"> <%= p.getPosts().get(i).getDate() %> </span>
                                                                             </div>
                                                                         </div>
                                                                         <div style="clear: right;"></div>
                                                                         <div class="well well-sm post_well">
-                                                                            <%= p.getPost(i) %>							
+                                                                            <%= p.getPosts().get(i).getText() %>							
                                                                         </div>
-                                                                        <div class="pull-left">
-                                                                            <a class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Delete</a>
-                                                                        </div>
-                                                                        <div class="pull-right">
-                                                                            <a class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Reply</a>
-                                                                        </div>
+                                                                        <% if (p.getPosts().get(i).getAuthorId() == Integer.parseInt(session.getAttribute("id").toString())) { %>
+                                                                            <div class="pull-right">
+                                                                                <a class="btn btn-danger btn-xs button_delete_post" data-id="<%= p.getPosts().get(i).getId() %>"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                                                                            </div>
+                                                                        <% } else { %>
+                                                                            <div class="pull-right">
+                                                                                <a class="btn btn-primary btn-xs" href="index.jsp?p=<%= p.getPosts().get(i).getAuthorId() %>#add_post_form"><span class="glyphicon glyphicon-share-alt"></span> Reply</a>
+                                                                            </div>
+                                                                        <% } %>
                                                                 </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>                        
                                         <% }
                                         %>
                                      </div>
@@ -199,9 +200,35 @@
             </div>
         <% } %>
                 </div>
-            </div>
-        </div> 
-        
-        
+                
+    <script type="text/javascript">
+	$(document).ready(function(){
+		$(".button_delete_post").click(function(){
+                    var post_id = $(this).data("id");
+			bootbox.dialog({
+				message: "Are you sure?",
+				title: "Removing post...",
+				onEscape: function() {},
+				show: true,
+				backdrop: true,
+				closeButton: true,
+				animate: true,
+				className: "confirm-delete-post-modal",
+				buttons: {
+					"Cancel": function() {},
+					"Remove": {
+						className: "btn-danger",
+						callback: function() {
+                                                        $.post( "PostDeleteServlet", { post_id: post_id})
+                                                        .done(function() {
+                                                            $("div.post-"+post_id).fadeOut("fast");
+                                                        });
+						}
+					},
+				}
+				});
+		});
+	});
+    </script> 
     </body>
 </html>

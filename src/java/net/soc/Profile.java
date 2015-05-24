@@ -34,9 +34,9 @@ public class Profile {
     private String country;
     private String city;
     private String about;
-    private List<String> posts = new ArrayList<>();
-    private List<Integer> id_posters = new ArrayList<>();  //person who write post (if user writes it himself, id = id_poster)
-    private List<Timestamp> times = new ArrayList<>();
+    private ArrayList<Post> posts = new ArrayList<>();
+    
+    
     /**
      * @return the id
      */
@@ -212,31 +212,15 @@ public class Profile {
     }
     
     
-    public String getPost(int i) {
+    public Post getPost(int i) {
         return posts.get(i);
     }
 
-    public void setPost(String post) {
-        posts.add(post);
-    }
-
-    public Integer getId_poster(int i) {
-        return id_posters.get(i);
-    }
-
-    public void setId_poster(Integer id_poster) {
-        id_posters.add(id_poster);
-    }
-
-    public Timestamp getTime(int i) {
-        return times.get(i);
-    }
-
-    public void setTime(Timestamp time) {
-        times.add(time);
+    public void setPosts(ArrayList<Post> posts) {
+        this.posts = posts;
     }
     
-    public List<String> getPosts() {
+    public ArrayList<Post> getPosts() {
         return posts;
     }
     
@@ -263,6 +247,19 @@ public class Profile {
                 setCountry(rs.getString(8));
                 setCity(rs.getString(9));
                 setAbout(rs.getString(10));
+                
+                //загружаем посты:
+                rs = st.executeQuery("SELECT ps.id, pr.id AS author_id, CONCAT(pr.first_name, \" \", pr.last_name) AS author_name, pr.photo AS author_photo, DATE_FORMAT(ps.date,'%d.%m.%Y %H:%i') AS date, ps.text FROM posts ps JOIN profiles pr ON ps.author_id=pr.id WHERE receiver_id=" + id + " ORDER BY ps.date DESC");
+                while(rs.next()) {
+                    posts.add(new Post(
+                            rs.getInt(1),
+                            rs.getInt(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getString(6)
+                    ));
+                }
                 return true;
             }
             return false;
