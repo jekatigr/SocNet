@@ -89,11 +89,6 @@ public class AddPostBean {
     
     
     
-    private String getCurrentDateForSQL() {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return formatter.format(Calendar.getInstance().getTime());
-    }
-    
     public boolean savePost() {
         Connection con = null;
         Statement st = null;
@@ -106,7 +101,7 @@ public class AddPostBean {
             st.executeUpdate("INSERT INTO posts (author_id, receiver_id, date, text) "
                     + "VALUES ("+ this.getAuthorId() +
                     ", "+ this.getReceiverId() +
-                    ", '"+ this.getCurrentDateForSQL() +
+                    ", '"+ DBConnect.getCurrentDateForSQL() +
                     "', '"+ this.getText() +" ')");
             
             return true;

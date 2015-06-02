@@ -8,7 +8,7 @@
     boolean load = false;
     boolean myprofile = false;
     if(auth) {
-        if (request.getParameter("p") == null || request.getParameter("p") == session.getAttribute("id")) {
+        if (request.getParameter("p") == null || request.getParameter("p").toString().equals(session.getAttribute("id").toString())) {
             load = p.load(Integer.parseInt(session.getAttribute("id").toString()));
             myprofile = true;
         } else {
@@ -73,8 +73,11 @@
                                 </div>
                                 <div class="panel-body">
                                         <div class="row">
-                                                <div class="col-md-4 col-md-offset-1">
+                                                <div class="col-md-4 col-md-offset-1 text-center">
                                                         <img class="profile_user_avatar" src="pic/photos/<%= p.getPhoto() %>">
+                                                        <% if (!myprofile) { %>
+                                                            <a class="btn btn-primary" href="chat.jsp?uid=<%= p.getId() %>">Send message</a>	
+                                                        <% } %>
                                                 </div>
                                                 <div class="col-md-5">
                                                         <table class="profile_user_info_table">
@@ -104,7 +107,7 @@
                                         <div>
                                             <div class="post-field">
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-10 col-md-offset-1">
                                                         <form accept-charset="UTF-8" action="components/add_post.jsp" method="POST">
                                                             <textarea class="form-control animated post_textarea" name="text" placeholder="Your text here..." rows="5"></textarea>
                                                             <input type="hidden" name="receiverId" value="<%= p.getId() %>">

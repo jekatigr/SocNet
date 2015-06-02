@@ -1,3 +1,6 @@
+body { padding-top: 70px; }
+
+
 .profile_user_info_table {
 	margin: 20px;
 }
@@ -52,3 +55,112 @@
 	border-radius: 12px;
 	margin: 20px auto;
 }
+
+.list-group-item-linkable:hover {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.chats_info_container {
+    display: inline-table;
+}
+.chats_receiver_avatar {
+    height: 60px;
+    width: 60px;
+    border: 0px;
+    float: left;
+    border-radius: 4px;
+    margin-left: 0px;
+}
+.chats_info_container_name_date {
+    display: inline-block;
+    margin-left: 10px;
+}
+.chats_info_name {
+    display: inline-block;
+    word-wrap: break-word;
+    max-width: 150px;
+}
+.chats_info_date {
+    font-size: 12px;
+}
+.chats_last_message_avatar {
+    height: 40px;
+    width: 40px;
+    border: 0px;
+    border-radius: 3px;
+    float: left;
+}
+.chats_last_message_container {
+    display: inline-block;
+    width: 60%;
+    background-color: #edf1f5;
+    padding: 10px;
+    max-height: 60px;
+    word-break: break-all;
+}
+.chats_last_message_text_container {
+    margin-left: 50px;
+}
+
+.messages_panel {
+    margin-bottom: 180px;
+}
+.message_avatar {
+    float: left;
+}
+.message_name_date {
+    margin: 0 0px 0px 75px;
+}
+.message_name {
+    display: inline-block;
+}
+.message_date {
+    float: right;
+    font-size: 12px;
+}
+.message_text {
+    margin: 0 0px 0px 75px;
+}
+.message_send_button {
+    margin-bottom: 20px;
+}
+.message_send_form_container {
+    background-color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
