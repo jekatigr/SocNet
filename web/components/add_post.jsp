@@ -6,12 +6,11 @@
 
 <%
 if (auth) {
-    out.println(formHandler.getText());
     if (formHandler.getText() != null && !formHandler.getText().equals(""))
     formHandler.setAuthorId(Integer.parseInt(session.getAttribute("id").toString()));
     formHandler.savePost();
     
-    //response.sendRedirect("../index.jsp?p=" + formHandler.getReceiverId() + "#posts");
+    response.sendRedirect("../index.jsp?p=" + formHandler.getReceiverId() + "#posts");
 }
 %>
 

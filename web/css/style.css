@@ -42,18 +42,38 @@ body { padding-top: 70px; }
 	min-height: 70px;
 }
 
-.people_user_info_table {
-	margin: 20px;
-}
-.people_table_td {
-	padding: 10px;
+.people_container {
+    padding: 20px;
 }
 .people_user_avatar {
-	height: 120px;
-	width: 120px;
-	border: 1px solid #dddddd;
-	border-radius: 12px;
-	margin: 20px auto;
+        height: 90px;
+        width: 90px;
+        border: 1px solid #dddddd;
+        float: left;
+        border-radius: 4px;
+        margin-left: 0px;
+}
+.people_info_container {
+    display: inline-table;
+}
+.people_container_name_info {
+    display: inline-block;
+    margin-left: 10px;
+}
+.people_info_name {
+    display: inline-block;
+    word-wrap: break-word;
+    max-width: 150px;
+}
+.people_info_item {
+    font-size: 12px;
+}
+.people_send_message_container {
+    display: inline-block;
+    background-color: #edf1f5;
+    padding: 10px;
+    max-height: 60px;
+    word-break: break-all;
 }
 
 .list-group-item-linkable:hover {

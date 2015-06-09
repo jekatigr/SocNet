@@ -82,6 +82,10 @@
                                                 <div class="col-md-5">
                                                         <table class="profile_user_info_table">
                                                                 <tr><td class="profile_table_td">
+                                                                        <span class="glyphicon glyphicon-briefcase"></span>
+                                                                        <b><%=p.getPosition() %></b>										
+                                                                </td></tr>
+                                                                <tr><td class="profile_table_td">
                                                                         <span class="glyphicon glyphicon-gift"></span>
                                                                         <b><%=p.getBirthday() %></b>										
                                                                 </td></tr>

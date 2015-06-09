@@ -9,6 +9,7 @@
 
 <%
     Chat chat = null;
+    
     if (auth && request.getParameter("uid") != null) {
         chat = Chat.createOrLoad(Integer.valueOf(session.getAttribute("id").toString()), Integer.valueOf(request.getParameter("uid")));
     }

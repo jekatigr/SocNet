@@ -34,6 +34,7 @@ public class Profile {
     private String country;
     private String city;
     private String about;
+    private String position;
     private ArrayList<Post> posts = new ArrayList<>();
     
     
@@ -235,7 +236,7 @@ public class Profile {
             st = (Statement) con.createStatement();
             rs = st.executeQuery("SELECT users.login, profiles.id, profiles.first_name, "
                     + "profiles.last_name, profiles.photo, profiles.sex, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
-                    + "profiles.country, profiles.city, profiles.about FROM users INNER JOIN profiles ON profiles.id = users.id WHERE users.id='" + id + "'");
+                    + "profiles.country, profiles.city, profiles.about, profiles.position FROM users INNER JOIN profiles ON profiles.id = users.id WHERE users.id='" + id + "'");
             if (rs.next()) {
                 setId(id);
                 setLogin(rs.getString(1));
@@ -247,6 +248,7 @@ public class Profile {
                 setCountry(rs.getString(8));
                 setCity(rs.getString(9));
                 setAbout(rs.getString(10));
+                setPosition(rs.getString(11));
                 
                 //загружаем посты:
                 rs = st.executeQuery("SELECT ps.id, pr.id AS author_id, CONCAT(pr.first_name, \" \", pr.last_name) AS author_name, pr.photo AS author_photo, DATE_FORMAT(ps.date,'%d.%m.%Y %H:%i') AS date, ps.text FROM posts ps JOIN profiles pr ON ps.author_id=pr.id WHERE receiver_id=" + id + " ORDER BY ps.date DESC");
@@ -276,6 +278,20 @@ public class Profile {
             }
         }
         return false;
+    }
+
+    /**
+     * @return the position
+     */
+    public String getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(String position) {
+        this.position = position;
     }
 
 }

@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdk.nashorn.internal.runtime.Version;
@@ -32,11 +32,11 @@ public class Chats {
         ResultSet rs = null;
 
         try {
-            DriverManager.registerDriver(new Driver());
+            DriverManager.registerDriver(new Driver()); //"+ userID +"
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(COALESCE(date, add_date),'%d.%m.%Y %H:%i') AS date, concat(p.first_name, ' ', p.last_name) as name, p.photo, user , text FROM (\n" +
-"SELECT u.user_id as user, u.chat_id as chat, m.date, m.text, c.is_group as is_group, u.add_date FROM users_to_chats u\n" +
+            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(date,'%d.%m.%Y %H:%i') AS date, concat(p.first_name, \" \", p.last_name) AS name, p.photo, user , text FROM (\n" +
+"SELECT u.user_id as user, u.chat_id as chat, COALESCE(m.date, u.add_date) as date, m.text, c.is_group as is_group FROM users_to_chats u\n" +
 "LEFT JOIN messages m ON m.utc_id = u.id\n" +
 "INNER JOIN chats c ON c.id = u.chat_id\n" +
 "WHERE u.chat_id IN (SELECT chat_id FROM users_to_chats WHERE user_id = "+ userID +")\n" +
@@ -45,14 +45,14 @@ public class Chats {
 "as a\n" +
 "INNER JOIN profiles p ON p.id = a.user\n" +
 "GROUP BY chat, user\n" +
-"ORDER BY chat, date DESC");
-            HashMap<Integer, ChatDescription> chats = new HashMap<>();
+"ORDER BY UNIX_TIMESTAMP(date) DESC");
+            LinkedHashMap<Integer, ChatDescription> chats = new LinkedHashMap<>();
             while (rs.next()) {
                 if (!chats.containsKey(rs.getInt(1))) { //этого чата еще не встречали
                     ChatDescription cd = new ChatDescription();
                     cd.setChatID(rs.getInt(1));
                     cd.setIsGroup(rs.getInt(2) == 1);
-                    rs.getString(3);
+                    rs.getString(7);
                     if (!rs.wasNull()) {
                         cd.setDate(rs.getString(3));
                         rs.getString(7);
@@ -72,8 +72,8 @@ public class Chats {
                 } else { //такой чат уже был
                     ChatDescription cd = chats.get(rs.getInt(1));
                     cd.setIsGroup(rs.getInt(2) == 1);
-                    rs.getString(3);
-                    if (!rs.wasNull() && cd.getDate() == null) {
+                    rs.getString(7);
+                    if (!rs.wasNull() && cd.getLastMessage() == null) {
                         cd.setDate(rs.getString(3));
                         rs.getString(7);
                         if (!rs.wasNull()) {
