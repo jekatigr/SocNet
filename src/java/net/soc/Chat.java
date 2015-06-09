@@ -29,7 +29,7 @@ public class Chat {
     private int chatID;
     private int chatOwner;
     private boolean isGroup;
-    private HashMap<Integer, Member> members = new HashMap<>();
+    private HashMap<Integer, Member> members = new HashMap<>(); //Integer=user_id
     private ArrayList<Message> messages = new ArrayList<>();
 
     /**
@@ -255,16 +255,13 @@ public class Chat {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
-        ResultSet rs2 = null;
 
         try {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
             rs = st.executeQuery("SELECT * FROM users_to_chats WHERE chat_id="+chatID+" AND user_id="+userID);
-            boolean chat_is_ok = rs.next();
-            rs2 = st.executeQuery("SELECT * FROM chats WHERE chat_owner="+userID+" AND id="+chatID);
-            if (chat_is_ok || rs2.next()) {
+            if (rs.next()) {
                 return true;
             }
             return false;
@@ -298,18 +295,15 @@ public class Chat {
                 res.setChatID(rs.getInt(1));
                 res.setChatOwner(rs.getInt(2));
                 res.setIsGroup((rs.getInt(3) == 1) ? true : false);
-            }
-            rs = st.executeQuery("SELECT utc.user_id, p.first_name, p.last_name, p.photo FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id WHERE chat_id="+chatID);
-            while (rs.next()) {
-                res.getMembers().put(rs.getInt(1), new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
-            }
-            rs = st.executeQuery("SELECT p.first_name, p.last_name, p.photo FROM profiles p WHERE id="+res.getChatOwner());
-            if (rs.next()) {
-                res.getMembers().put(res.getChatOwner(), new Member(res.getChatOwner(), rs.getString(1), rs.getString(2), rs.getString(3)));
-            }
-            rs = st.executeQuery("SELECT id, DATE_FORMAT(date, '%d.%m.%Y %H:%i:%s') AS date, user_id, text FROM messages WHERE chat_id="+chatID+" ORDER BY UNIX_TIMESTAMP(date)");
-            while (rs.next()) {
-                res.getMessages().add(new Message(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4)));
+            
+                rs = st.executeQuery("SELECT utc.user_id, p.first_name, p.last_name, p.photo, m.id AS message_id, DATE_FORMAT(m.date, '%d.%m.%Y %H:%i:%s') AS date, m.text FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id JOIN messages m ON m.utc_id=utc.id WHERE chat_id="+chatID+" ORDER BY UNIX_TIMESTAMP(m.date)");
+                while (rs.next()) {
+                    if (!res.getMembers().containsKey(rs.getInt(1))) {
+                        res.getMembers().put(rs.getInt(1), new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                    }
+                    
+                    res.getMessages().add(new Message(rs.getInt(5), rs.getString(6), rs.getInt(1), rs.getString(7)));
+                }
             }
             return res;
         } catch (SQLException ex) {
@@ -342,7 +336,7 @@ public class Chat {
                 return null;
             }
             //проверка существования готового чата
-            rs = st.executeQuery("SELECT utc.chat_id FROM users_to_chats utc JOIN chats c ON c.id=utc.chat_id WHERE ((utc.user_id="+ userID +" AND c.chat_owner="+ receiverID +") OR (utc.user_id="+ receiverID +" AND c.chat_owner="+ userID +")) AND c.is_group=0");
+            rs = st.executeQuery("SELECT utc.chat_id FROM users_to_chats utc JOIN (SELECT * FROM users_to_chats WHERE user_id="+ receiverID +") utc2 ON utc.chat_id=utc2.chat_id JOIN chats c ON c.id=utc.chat_id WHERE utc.user_id="+ userID +" AND c.is_group=0");
             if (rs.next()) {
                 return load(rs.getInt(1));
             }
@@ -351,7 +345,9 @@ public class Chat {
             rs = st.executeQuery("SELECT id FROM chats WHERE chat_owner="+userID+" ORDER BY id DESC");
             if (rs.next()) {
                 int newChatID = rs.getInt(1);
-                st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ DBConnect.getCurrentDateForSQL() +"')");
+                String date = DBConnect.getDateForSQL(Calendar.getInstance().getTime());
+                st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ userID +","+ newChatID +",'"+ date +"')");
+                st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ date +"')");
             
                 return load(newChatID);
             }

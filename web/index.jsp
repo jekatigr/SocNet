@@ -108,7 +108,7 @@
                                             <div class="post-field">
                                                 <div class="row">
                                                     <div class="col-md-10 col-md-offset-1">
-                                                        <form accept-charset="UTF-8" action="components/add_post.jsp" method="POST">
+                                                        <form action="components/add_post.jsp" method="POST">
                                                             <textarea class="form-control animated post_textarea" name="text" placeholder="Your text here..." rows="5"></textarea>
                                                             <input type="hidden" name="receiverId" value="<%= p.getId() %>">
                                                             

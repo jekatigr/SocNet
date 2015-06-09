@@ -23,17 +23,7 @@ import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.runtime.Version;
 
 /**
  *
@@ -85,9 +75,6 @@ public class AddPostBean {
     public void setText(String text) {
         this.text = text;
     }
-
-    
-    
     
     public boolean savePost() {
         Connection con = null;
@@ -98,10 +85,11 @@ public class AddPostBean {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
+            
             st.executeUpdate("INSERT INTO posts (author_id, receiver_id, date, text) "
                     + "VALUES ("+ this.getAuthorId() +
                     ", "+ this.getReceiverId() +
-                    ", '"+ DBConnect.getCurrentDateForSQL() +
+                    ", '"+ DBConnect.getDateForSQL(Calendar.getInstance().getTime()) +
                     "', '"+ this.getText() +" ')");
             
             return true;
@@ -117,10 +105,5 @@ public class AddPostBean {
             }
         }
         return false;
-    }
-
-    private String getCurrentTime() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }

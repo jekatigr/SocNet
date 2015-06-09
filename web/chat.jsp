@@ -96,6 +96,8 @@
                                 $(".no_messages_title").hide();
                                 $(".messages_table").append('<tr><td><div class="message_container"><div class="message_avatar"><a href="index.jsp?p='+ o.userid +'"><img class="chats_receiver_avatar" src="pic/photos/'+ o.photo +'"></a></div><div class="message_name_date"><div class="message_name"><a href="index.jsp?p='+ o.userid +'">'+ o.name +'</a></div><div class="message_date">'+ o.datetime +'</div></div><div class="message_text">'+ text +'</div></div></td></tr>');
                                 window.scrollTo(0,document.body.scrollHeight);
+                                $(".message_textarea").val("");
+                                $(".form-control").focus();
                             }
                         })
                 }

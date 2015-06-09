@@ -12,6 +12,8 @@ import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdk.nashorn.internal.runtime.Version;
@@ -79,21 +81,23 @@ public class SendMessageBean {
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
             //проверка на существование чата
-            rs = st.executeQuery("SELECT * FROM users_to_chats WHERE chat_id="+this.getChatID()+" AND user_id="+this.getUserID());
-            boolean chat_is_ok = rs.next();
-            rs2 = st.executeQuery("SELECT * FROM chats WHERE chat_owner="+this.getUserID()+" AND id="+this.getChatID());
-            if (!chat_is_ok && !rs2.next()) {
+            rs = st.executeQuery("SELECT utc.id, p.first_name, p.photo FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id WHERE utc.chat_id="+this.getChatID()+" AND utc.user_id="+this.getUserID());
+            if (!rs.next()) {
                 return "{\"ok\": \"false\"}";
             }
-            rs2 = st.executeQuery("SELECT p.first_name, p.photo FROM profiles p WHERE id="+this.getUserID());
-            rs2.next();
-            String name = rs2.getString(1);
-            String photo = rs2.getString(2);
+            
+            int utcId = rs.getInt(1);
+            String name = rs.getString(2);
+            String photo = rs.getString(3);
             photo = (photo != null && !photo.equals("")) ? photo : "def.jpg";
             
-            String dt = DBConnect.getCurrentDateForSQL();
-            st.executeUpdate("INSERT INTO messages (date, user_id, chat_id, text) VALUES ('"+ dt +"', "+ this.getUserID() +", "+ this.getChatID() +", '"+ this.getMessage() +"')");
-            return "{\"ok\": \"true\", \"datetime\": \""+ dt +"\", \"userid\":"+this.getUserID()+", \"photo\":\""+ photo +"\", \"name\":\""+ name +"\"}";
+            Date date = Calendar.getInstance().getTime();
+            String dt = DBConnect.getDateForSQL(date);
+            st.executeUpdate("INSERT INTO messages (date, utc_id, text) VALUES ('"+ dt +"', "+ utcId +", '"+ this.getMessage() +"')");
+            
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            String dtf = sdf.format(date);
+            return "{\"ok\": \"true\", \"datetime\": \""+ dtf +"\", \"userid\":"+this.getUserID()+", \"photo\":\""+ photo +"\", \"name\":\""+ name +"\"}";
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {

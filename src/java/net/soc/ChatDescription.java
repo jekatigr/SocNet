@@ -13,12 +13,13 @@ package net.soc;
 public class ChatDescription {
     private int chatID;
     private String date;
-    private int membersCount = 2;
+    private int membersCount;
     private int receiverID;
     private String receiverName;
     private String receiverPhoto;
     private String lastMessage;
     private String photoLastMessage;
+    private boolean isGroup;
 
     /**
      * @return the receiverName
@@ -38,7 +39,7 @@ public class ChatDescription {
      * @return the receiverPhoto
      */
     public String getReceiverPhoto() {
-        return (membersCount > 2) ? "group.png" : (receiverPhoto != null && !receiverPhoto.equals("")) ? receiverPhoto : "def.jpg";
+        return (this.isGroup) ? "group.png" : (receiverPhoto != null && !receiverPhoto.equals("")) ? receiverPhoto : "def.jpg";
     }
 
     /**
@@ -80,7 +81,7 @@ public class ChatDescription {
      * @return the lastMessage
      */
     public String getLastMessage() {
-        return lastMessage;
+        return (lastMessage != null) ? lastMessage : "No messages yet...";
     }
 
     /**
@@ -130,6 +131,24 @@ public class ChatDescription {
      */
     public void setReceiverID(int receiverID) {
         this.receiverID = receiverID;
+    }
+
+    void increaseMembersCount() {
+        this.membersCount++;
+    }
+
+    /**
+     * @return the isGroup
+     */
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    /**
+     * @param isGroup the isGroup to set
+     */
+    public void setIsGroup(boolean isGroup) {
+        this.isGroup = isGroup;
     }
     
     
