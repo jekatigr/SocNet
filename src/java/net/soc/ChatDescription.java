@@ -25,7 +25,7 @@ public class ChatDescription {
      * @return the receiverName
      */
     public String getReceiverName() {
-        return receiverName;
+        return (receiverName != null && !receiverName.trim().equals("")) ? receiverName : "Unknown";
     }
 
     /**

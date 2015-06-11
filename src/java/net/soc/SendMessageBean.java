@@ -96,7 +96,7 @@ public class SendMessageBean {
             
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
             String dtf = sdf.format(date);
-            return "{\"ok\": \"true\", \"datetime\": \""+ dtf +"\", \"userid\":"+this.getUserID()+", \"photo\":\""+ photo +"\", \"name\":\""+ name +"\"}";
+            return "{\"ok\": \"true\", \"datetime\": \""+ dtf +"\", \"userid\":"+this.getUserID()+", \"photo\":\""+ photo +"\", \"name\":\""+ ((name != null && !name.equals("")) ? name : "Unknown") +"\"}";
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {

@@ -151,7 +151,7 @@ public class Chat {
          * @return the name
          */
         public String getName() {
-            return firstName;
+            return (this.firstName != null && !this.firstName.equals("")) ? firstName : "Unknown";
         }
 
         /**
@@ -199,7 +199,8 @@ public class Chat {
                     res += " ";
                 }
                 res += this.lastName;
-            }
+            } 
+            if (res.equals("")) { res = "Unknown"; }
             return res;
         }
     }

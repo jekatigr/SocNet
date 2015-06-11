@@ -6,6 +6,10 @@
 <%@include file="WEB-INF/blocks/auth.jspf" %>
 
 <%
+    if(!auth) {
+        response.sendRedirect("index.jsp");
+        throw new javax.servlet.jsp.SkipPageException();
+    }
     ArrayList<Profile> list = People.loadAll();
     ArrayList<String> positions = People.loadAllPositions();
     ArrayList<String> countries = People.loadAllCountries();
@@ -79,7 +83,7 @@
                                         <span class="people_info_item"><span class="glyphicon glyphicon-map-marker"></span> <%= p.getLocation() %></span>
                                     </div>
                                 </div>
-                                <% if (p.getId() != Integer.parseInt(session.getAttribute("id").toString())) { %>
+                                <% if (session.getAttribute("id") != null && p.getId() != Integer.parseInt(session.getAttribute("id").toString())) { %>
                                     <div class="people_send_message_container pull-right">
                                         <a class="btn btn-primary" href="chat.jsp?uid=<%= p.getId() %>">Send message</a>
                                     </div>
@@ -138,7 +142,6 @@
                         '                <span class="people_info_item"><span class="glyphicon glyphicon-map-marker"></span> '+ resp.people[i].location +'</span>'+
                         '            </div>                                                                                                              '+
                         '         </div>                                                                                                                 '+ add+
-                            
                         '   </div>');
                         }
                         

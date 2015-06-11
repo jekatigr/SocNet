@@ -53,7 +53,7 @@ public class Profile {
      * @return the first_name
      */
     public String getFirst_name() {
-        return first_name;
+        return (first_name != null && !first_name.equals("")) ? first_name : "";
     }
 
     /**
@@ -67,7 +67,7 @@ public class Profile {
      * @return the last_name
      */
     public String getLast_name() {
-        return last_name;
+        return (last_name != null && !last_name.equals("")) ? last_name : "";
     }
 
     /**
@@ -89,7 +89,7 @@ public class Profile {
             res += this.last_name;
         }
         if (res.equals("")) {
-            return this.login;
+            return "Unknown";
         } else {
             return res;
         }
@@ -113,7 +113,7 @@ public class Profile {
      * @return the birthday
      */
     public String getBirthday() {
-        return (this.birthday != null) ? this.birthday.toString() : "undefended";
+        return (this.birthday != null) ? this.birthday.toString() : "Unknown";
     }
 
     /**
@@ -127,7 +127,7 @@ public class Profile {
      * @return the country
      */
     public String getCountry() {
-        return country;
+        return (country != null && !country.equals("")) ? country : "";
     }
 
     /**
@@ -141,7 +141,7 @@ public class Profile {
      * @return the city
      */
     public String getCity() {
-        return city;
+        return (city != null && !city.equals("")) ? city : "";
     }
 
     /**
@@ -163,7 +163,7 @@ public class Profile {
             res += this.city;
         }
         if (res.equals("")) {
-            return "undefended";
+            return "Unknown";
         } else {
             return res;
         }
@@ -261,7 +261,7 @@ public class Profile {
      * @return the position
      */
     public String getPosition() {
-        return position;
+        return (position != null && !position.equals("")) ? position : "Unknown";
     }
 
     /**

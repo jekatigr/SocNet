@@ -121,8 +121,15 @@
                                     </div>
                                     <div style="clear:both;"></div>
                                 <% session.removeAttribute("password_changed_error"); } %>
+                                <% if (session.getAttribute("account_deletion_error") != null) { %>
+                                    <div class="alert alert-danger col-md-offset-3 col-md-6 alert-dismissible fade in">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;<strong><%= session.getAttribute("account_deletion_error") %></strong>
+                                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                <% session.removeAttribute("account_deletion_error"); } %>
                                 <div class="row">
-                                        <div class="col-md-8 col-md-offset-2">
+                                        <div class="col-md-8 col-md-offset-0">
                                                 <div class="panel panel-warning">
                                                         <div class="panel-heading">
                                                             <b>Change password:</b>
@@ -145,6 +152,21 @@
                                                                         </div>
                                                                         <button class="btn btn-warning" type="submit">Save</button>
                                                                 </form>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-4 col-md-offset-0">
+                                                <div class="panel panel-danger">
+                                                        <div class="panel-heading">
+                                                            <b>Delete account:</b>
+                                                        </div>
+                                                        <div class="panel-body text-center">
+                                                            <form class="form-inline delete_account_form" action="components/delete_account_handler.jsp" method="POST" onsubmit="event.preventDefault();askConfirm();">
+                                                                <div class="form-group">
+                                                                        <input type="password" class="form-control" id="inputPass" name="pass" placeholder="Your password..." value="">
+                                                                </div>
+                                                                <button class="btn btn-danger delete_account_button" type="submit">Delete account</button>
+                                                            </form>
                                                         </div>
                                                 </div>
                                         </div>
@@ -191,10 +213,41 @@
 		$("#inputBirthday").focus(function(){
                     $(this).datepicker('show');
 		});
-		$("#inputSex").focus(function(){
+		$("#inputPosition").focus(function(){
                     $("#inputBirthday").datepicker('hide');
 		});
-	});
+            });
+            
+            function askConfirm() {
+                bootbox.dialog({
+                        message: "All private message won't be deleted.",
+                        title: "Are you sure you want to delete your account?",
+                        onEscape: function() {},
+                        show: true,
+                        backdrop: true,
+                        closeButton: true,
+                        animate: true,
+                        className: "confirm-delete-photo-modal",
+                        buttons: {
+                                "Cancel": function() {},
+                                "Remove": {
+                                        className: "btn-danger",
+                                        callback: function() {
+                                            var data = $(".delete_account_form").serializeArray();
+                                            $.post("components/delete_account_handler.jsp", data, function(o) {
+                                                var resp = $.parseJSON(o);
+                                                if (resp.ok === "true") {
+                                                    window.location.href = 'index.jsp';
+                                                } else {
+                                                    window.location.reload();
+                                                }
+                                            });
+                                        }
+                                },
+                        }
+                        });
+                return false;
+            };
     </script>        
     </body>
 </html>
