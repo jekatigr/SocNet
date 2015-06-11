@@ -325,7 +325,7 @@
                                 membersIdArray.push(user_id);
                                 $(".member_container").html('<button class="btn btn-primary show_members_button">Members: '+ membersIdArray.length +'</button>  ');
                                 $(".show_members_button").click(showMembersPopup);
-                                $(".all_members").append(	'<div class="list-group-item members_container">																									'+
+                                $(".all_members").append(	'<div class="list-group-item members_container member-'+ user_id +'">																									'+
                                                                 '	<div class="members_info_container">                                                                                                            '+
                                                                 '		<a class="members_user_avatar_link" href="index.jsp?p='+ user_id +'">                                                                '+
                                                                 '			<img class="members_user_avatar" src="pic/photos/'+ user_photo +'">                                                                  '+
@@ -335,7 +335,7 @@
                                                                 '		</div>                                                                                                                                      '+
                                                                 '	</div>                                                                                                                                          '+
                                                                 '	          '+
-                                                                '		<button class="btn btn-danger pull-right delete_user_from_chat_button" href="cha.jsp?uid='+ user_id +'">Delete from chat</button>    '+
+                                                                '		<button class="btn btn-danger pull-right delete_user_from_chat_button" data-user_id='+ user_id +'>Delete from chat</button>    '+
                                                                 '	                                                                                                                                       '+
                                                                 '</div>');
                                 $(".delete_user_from_chat_button").click(deleteUserFromChat);                                
