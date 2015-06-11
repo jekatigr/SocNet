@@ -24,7 +24,7 @@ public class EditProfileBean {
     private int id;
     private String first_name;
     private String last_name;
-    private int sex; //1-male, 0-female
+    private String position;
     private String birthday;
     private String country;
     private String city;
@@ -70,21 +70,6 @@ public class EditProfileBean {
      */
     public void setLast_name(String last_name) {
         this.last_name = last_name;
-    }
-
-
-    /**
-     * @return the sex
-     */
-    public int getSex() {
-        return sex;
-    }
-
-    /**
-     * @param sex the sex to set
-     */
-    public void setSex(int sex) {
-        this.sex = sex;
     }
 
     /**
@@ -154,7 +139,7 @@ public class EditProfileBean {
             st = (Statement) con.createStatement();
             st.executeUpdate("UPDATE profiles SET first_name='"+ this.getFirst_name() +"', "
                     + "last_name='"+ this.getLast_name() +"', "
-                    + "sex="+ this.getSex() +", "
+                    + "position='"+ this.getPosition() +"', "
                     + "birthday='"+ this.getBirthdayForSql() +"',"
                     + "country='"+ this.getCountry() +"', "
                     + "city='"+ this.getCity() +"', "
@@ -179,5 +164,19 @@ public class EditProfileBean {
         String b = this.birthday;
         String res = b.substring(6, b.length()) + "-" + b.substring(3, 5) + "-" + b.substring(0, 2);
         return res;
+    }
+
+    /**
+     * @return the position
+     */
+    public String getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

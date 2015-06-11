@@ -13,8 +13,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdk.nashorn.internal.runtime.Version;
@@ -29,7 +27,6 @@ public class Profile {
     private String first_name;
     private String last_name;
     private String photo;
-    private boolean sex; //true-male, false-female
     private String birthday;
     private String country;
     private String city;
@@ -113,20 +110,6 @@ public class Profile {
     }
 
     /**
-     * @return the sex
-     */
-    public boolean isSex() {
-        return sex;
-    }
-
-    /**
-     * @param sex the sex to set
-     */
-    public void setSex(boolean sex) {
-        this.sex = sex;
-    }
-
-    /**
      * @return the birthday
      */
     public String getBirthday() {
@@ -206,12 +189,7 @@ public class Profile {
     
     public String getLogin() {
         return this.login;
-    } 
-    
-    public boolean getSex() {
-        return this.sex;
-    }
-    
+    }    
     
     public Post getPost(int i) {
         return posts.get(i);
@@ -235,7 +213,7 @@ public class Profile {
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
             rs = st.executeQuery("SELECT users.login, profiles.id, profiles.first_name, "
-                    + "profiles.last_name, profiles.photo, profiles.sex, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
+                    + "profiles.last_name, profiles.photo, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
                     + "profiles.country, profiles.city, profiles.about, profiles.position FROM users INNER JOIN profiles ON profiles.id = users.id WHERE users.id='" + id + "'");
             if (rs.next()) {
                 setId(id);
@@ -243,12 +221,11 @@ public class Profile {
                 setFirst_name(rs.getString(3));
                 setLast_name(rs.getString(4));
                 setPhoto(rs.getString(5));
-                setSex(rs.getString(6).equals("1"));
-                setBirthday(rs.getString(7));
-                setCountry(rs.getString(8));
-                setCity(rs.getString(9));
-                setAbout(rs.getString(10));
-                setPosition(rs.getString(11));
+                setBirthday(rs.getString(6));
+                setCountry(rs.getString(7));
+                setCity(rs.getString(8));
+                setAbout(rs.getString(9));
+                setPosition(rs.getString(10));
                 
                 //загружаем посты:
                 rs = st.executeQuery("SELECT ps.id, pr.id AS author_id, CONCAT(pr.first_name, \" \", pr.last_name) AS author_name, pr.photo AS author_photo, DATE_FORMAT(ps.date,'%d.%m.%Y %H:%i') AS date, ps.text FROM posts ps JOIN profiles pr ON ps.author_id=pr.id WHERE receiver_id=" + id + " ORDER BY ps.date DESC");

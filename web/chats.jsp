@@ -26,36 +26,42 @@
             <div class="row col-md-6 col-md-offset-3">
                 <div class="list-group">
                 <%
-                    for(int i = 0; i < chats.size(); i++) {
-                        ChatDescription cd = chats.get(i);
-                        %>
-                            <div class="list-group-item list-group-item-linkable" data-link="chat.jsp?cid=<%= cd.getChatID() %>">
-                                <% if (!cd.isGroup()) { %>
-                                    <div class="chats_info_container">
-                                        <a href="index.jsp?p=<%= cd.getReceiverID() %>"><img class="chats_receiver_avatar" src="pic/photos/<%= cd.getReceiverPhoto() %>"></a>
-                                        <div class="chats_info_container_name_date">
-                                            <a class="chats_info_name" href="index.jsp?p=<%= cd.getReceiverID() %>"><%= cd.getReceiverName() %></a>
-                                            <br>
-                                            <span class="chats_info_date"><%= (cd.getDate() != null) ? cd.getDate() : "-" %></span>
+                    if (!chats.isEmpty()) {
+                        for(int i = 0; i < chats.size(); i++) {
+                            ChatDescription cd = chats.get(i);
+                            %>
+                                <div class="list-group-item list-group-item-linkable" data-link="chat.jsp?cid=<%= cd.getChatID() %>">
+                                    <% if (!cd.isGroup()) { %>
+                                        <div class="chats_info_container">
+                                            <a href="index.jsp?p=<%= cd.getReceiverID() %>"><img class="chats_receiver_avatar" src="pic/photos/<%= cd.getReceiverPhoto() %>"></a>
+                                            <div class="chats_info_container_name_date">
+                                                <a class="chats_info_name" href="index.jsp?p=<%= cd.getReceiverID() %>"><%= cd.getReceiverName() %></a>
+                                                <br>
+                                                <span class="chats_info_date"><%= (cd.getDate() != null) ? cd.getDate() : "-" %></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                <% } else { %>
-                                    <div class="chats_info_container">
-                                        <img class="chats_receiver_avatar" src="pic/photos/<%= cd.getReceiverPhoto() %>">
-                                        <div class="chats_info_container_name_date">
-                                            <a class="chats_info_name" href="chat.jsp?cid=<%= cd.getChatID() %>">Members: <%= cd.getMembersCount() %></a>
-                                            <br>
-                                            <span class="chats_info_date"><%= (cd.getDate() != null) ? cd.getDate() : "-" %></span>
+                                    <% } else { %>
+                                        <div class="chats_info_container">
+                                            <img class="chats_receiver_avatar" src="pic/photos/<%= cd.getReceiverPhoto() %>">
+                                            <div class="chats_info_container_name_date">
+                                                <a class="chats_info_name" href="chat.jsp?cid=<%= cd.getChatID() %>">Members: <%= cd.getMembersCount() %></a>
+                                                <br>
+                                                <span class="chats_info_date"><%= (cd.getDate() != null) ? cd.getDate() : "-" %></span>
+                                            </div>
                                         </div>
+                                    <% } %>
+                                    <div class="chats_last_message_container pull-right">
+                                        <img class="chats_last_message_avatar" src="pic/photos/<%= cd.getPhotoLastMessage() %>">
+                                        <div class="chats_last_message_text_container"><%= (cd.getLastMessage() != null) ? cd.getLastMessage() : "No messages yet..." %></div>
                                     </div>
-                                <% } %>
-                                <div class="chats_last_message_container pull-right">
-                                    <img class="chats_last_message_avatar" src="pic/photos/<%= cd.getPhotoLastMessage() %>">
-                                    <div class="chats_last_message_text_container"><%= cd.getLastMessage() %></div>
                                 </div>
-                            </div>
-                                
-                        <%
+
+                            <%
+                        }
+                    } else {
+                        %>
+                        <h2 align="center" class="no_messages_title">No chats yet...</h2>
+                    <%
                     }
                 %>
                 </div>

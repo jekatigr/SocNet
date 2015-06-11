@@ -34,7 +34,7 @@ public class People {
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
             rs = st.executeQuery("SELECT users.login, profiles.id, profiles.first_name, "
-                    + "profiles.last_name, profiles.photo, profiles.sex, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
+                    + "profiles.last_name, profiles.photo, DATE_FORMAT(profiles.birthday,'%d.%m.%Y'), "
                     + "profiles.country, profiles.city, profiles.about, profiles.position FROM users INNER JOIN profiles ON profiles.id = users.id ORDER BY profiles.id");
             while (rs.next()) {
                 Profile p = new Profile();
@@ -43,12 +43,11 @@ public class People {
                 p.setFirst_name(rs.getString(3));
                 p.setLast_name(rs.getString(4));
                 p.setPhoto(rs.getString(5));
-                p.setSex(rs.getString(6).equals("1"));
-                p.setBirthday(rs.getString(7));
-                p.setCountry(rs.getString(8));
-                p.setCity(rs.getString(9));
-                p.setAbout(rs.getString(10));
-                p.setPosition(rs.getString(11));
+                p.setBirthday(rs.getString(6));
+                p.setCountry(rs.getString(7));
+                p.setCity(rs.getString(8));
+                p.setAbout(rs.getString(9));
+                p.setPosition(rs.getString(10));
                 list.add(p);
             }
         } catch (SQLException ex) {
@@ -77,7 +76,7 @@ public class People {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT DISTINCT position FROM profiles ORDER BY position");
+            rs = st.executeQuery("SELECT DISTINCT position FROM profiles WHERE position IS NOT NULL ORDER BY position");
             while (rs.next()) {
                 list.add(rs.getString(1));
             }
@@ -107,7 +106,7 @@ public class People {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT DISTINCT country FROM profiles ORDER BY country");
+            rs = st.executeQuery("SELECT DISTINCT country FROM profiles WHERE country IS NOT NULL ORDER BY country");
             while (rs.next()) {
                 list.add(rs.getString(1));
             }
@@ -137,7 +136,7 @@ public class People {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT DISTINCT city FROM profiles ORDER BY city");
+            rs = st.executeQuery("SELECT DISTINCT city FROM profiles WHERE city IS NOT NULL ORDER BY city");
             while (rs.next()) {
                 list.add(rs.getString(1));
             }
@@ -169,7 +168,7 @@ public class People {
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
             String sql = "SELECT u.login, p.id, p.first_name, "
-                    + "p.last_name, p.photo, p.sex, DATE_FORMAT(p.birthday,'%d.%m.%Y'), "
+                    + "p.last_name, p.photo, DATE_FORMAT(p.birthday,'%d.%m.%Y'), "
                     + "p.country, p.city, p.about, p.position FROM users u INNER JOIN profiles p ON p.id = u.id ";
             if (namepart != null && !namepart.equals("")) {
                 sql += "WHERE (p.first_name LIKE CONCAT('" + namepart + "', '%') OR p.last_name LIKE CONCAT('" + namepart + "', '%'))";
@@ -207,12 +206,11 @@ public class People {
                 p.setFirst_name(rs.getString(3));
                 p.setLast_name(rs.getString(4));
                 p.setPhoto(rs.getString(5));
-                p.setSex(rs.getString(6).equals("1"));
-                p.setBirthday(rs.getString(7));
-                p.setCountry(rs.getString(8));
-                p.setCity(rs.getString(9));
-                p.setAbout(rs.getString(10));
-                p.setPosition(rs.getString(11));
+                p.setBirthday(rs.getString(6));
+                p.setCountry(rs.getString(7));
+                p.setCity(rs.getString(8));
+                p.setAbout(rs.getString(9));
+                p.setPosition(rs.getString(10));
                 list.add(p);
             }
         } catch (SQLException ex) {

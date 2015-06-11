@@ -81,7 +81,7 @@ public class ChatDescription {
      * @return the lastMessage
      */
     public String getLastMessage() {
-        return (lastMessage != null) ? lastMessage : "No messages yet...";
+        return lastMessage;
     }
 
     /**

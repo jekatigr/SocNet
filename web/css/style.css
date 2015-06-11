@@ -126,7 +126,7 @@ body { padding-top: 70px; }
 }
 
 .messages_panel {
-    margin-bottom: 180px;
+    margin-bottom: 179px;
 }
 .message_avatar {
     float: left;
@@ -145,42 +145,63 @@ body { padding-top: 70px; }
     margin: 0 0px 0px 75px;
 }
 .message_send_button {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
 .message_send_form_container {
     background-color: #ffffff;
 }
+.member_container {
+    display: inline-table;
+}
+.chat_member_name {
+    display:inline-block;
+    margin-top: 13px;
+    margin-left: 10px;
+}
+.chat_member_avatar {
+    height: 45px;
+    width: 45px;
+    border: 0px;
+    float: left;
+    border-radius: 3px;
+    margin-left: 0px;
+}
+.show_members_button {
+    margin-top: 10px;
+}
+.add_members_button {
+    margin-top: 10px;
+    margin-left: 20px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.members_container {
+    padding: 5px;
+}
+.members_user_avatar_link {
+    float: left;
+    margin-left: 0px;
+}
+.members_user_avatar {
+    height: 40px;
+    width: 40px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+}
+.members_info_container {
+    display: inline-table;
+}
+.members_container_name_info {
+    display: inline-block;
+    margin-left: 10px;
+}
+.members_info_name {
+    display: inline-block;
+    word-wrap: break-word;
+    max-width: 150px;
+}
+.delete_user_from_chat_button {
+    margin: 3px;
+}
 
 

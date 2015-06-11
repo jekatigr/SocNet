@@ -89,15 +89,12 @@
                                                         <input type="text" class="form-control" id="inputLn" placeholder="Enter your last name..." name="last_name" value="<%= p.getLast_name() %>">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                        <label for="inputBirthday">Birthday:</label>
-                                                        <input type="text" class="form-control" id="inputBirthday" placeholder="Enter your birthday..." name="birthday" value="<%= p.getBirthday() %>">
+                                                       <label for="inputPos">Position:</label>
+                                                        <input type="text" class="form-control" id="inputPos" placeholder="Enter your position..." name="position" value="<%= p.getPosition() %>">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                        <label for="inputSex">Sex:</label>
-                                                        <select class="form-control" id="inputSex" name="sex">
-                                                            <option<% if(p.getSex() == true) { out.print(" selected"); } %> value="1">Male</option>
-                                                            <option<% if(p.getSex() == false) { out.print(" selected"); } %> value="0">Female</option>
-                                                        </select>
+                                                        <label for="inputBirthday">Birthday:</label>
+                                                        <input type="text" class="form-control" id="inputBirthday" placeholder="Enter your birthday..." name="birthday" value="<%= p.getBirthday() %>">
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                         <label for="inputCountry">Country:</label>

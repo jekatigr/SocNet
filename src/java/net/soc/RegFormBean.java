@@ -3,9 +3,6 @@ package net.soc;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;

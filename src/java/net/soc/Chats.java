@@ -23,7 +23,9 @@ import jdk.nashorn.internal.runtime.Version;
  * @author TireX
  */
 public class Chats {
-    
+    public static void main(String[] args) {
+        ArrayList<ChatDescription> chats = Chats.loadAll(1);
+    } 
     public static ArrayList<ChatDescription> loadAll(int userID) {
         ArrayList<ChatDescription> list = new ArrayList<>();
         
@@ -35,7 +37,7 @@ public class Chats {
             DriverManager.registerDriver(new Driver()); //"+ userID +"
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(date,'%d.%m.%Y %H:%i') AS date, concat(p.first_name, \" \", p.last_name) AS name, p.photo, user , text FROM (\n" +
+            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(date,'%d.%m.%Y %H:%i') AS date, concat(p.first_name, \" \", p.last_name) AS name, p.photo, user, text FROM (\n" +
 "SELECT u.user_id as user, u.chat_id as chat, COALESCE(m.date, u.add_date) as date, m.text, c.is_group as is_group FROM users_to_chats u\n" +
 "LEFT JOIN messages m ON m.utc_id = u.id\n" +
 "INNER JOIN chats c ON c.id = u.chat_id\n" +
@@ -55,10 +57,7 @@ public class Chats {
                     rs.getString(7);
                     if (!rs.wasNull()) {
                         cd.setDate(rs.getString(3));
-                        rs.getString(7);
-                        if (!rs.wasNull()) { 
-                            cd.setLastMessage(rs.getString(7));
-                        }
+                        cd.setLastMessage(rs.getString(7));
                         cd.setPhotoLastMessage(rs.getString(5));
                     }
                     if (rs.getInt(6) != userID) {
@@ -75,10 +74,7 @@ public class Chats {
                     rs.getString(7);
                     if (!rs.wasNull() && cd.getLastMessage() == null) {
                         cd.setDate(rs.getString(3));
-                        rs.getString(7);
-                        if (!rs.wasNull()) {
-                            cd.setLastMessage(rs.getString(7));
-                        }
+                        cd.setLastMessage(rs.getString(7));
                         cd.setPhotoLastMessage(rs.getString(5));
                     }
                     if (rs.getInt(6) != userID) {

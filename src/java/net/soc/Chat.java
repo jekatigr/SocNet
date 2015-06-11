@@ -52,6 +52,18 @@ public class Chat {
     public HashMap<Integer, Member> getMembers() {
         return members;
     }
+    public String getMembersIdForJS() {
+        String res = "[";
+        for (Member m : members.values()) {
+            res += "" + m.getUserID() + ", ";
+        }
+        if (!res.equals("[")) {
+            res = res.substring(0, res.length() - 2) + "]";
+        } else {
+            res += "]";
+        }
+        return res;
+    }
 
     /**
      * @param members the members to set
@@ -60,10 +72,12 @@ public class Chat {
         this.members = members;
     }
 
+    
+    
     /**
      * @return the isGroup
      */
-    public boolean isIsGroup() {
+    public boolean isGroup() {
         return isGroup;
     }
 
@@ -174,6 +188,20 @@ public class Chat {
         public void setLastName(String lastName) {
             this.lastName = lastName;
         }
+        
+        public String getFullName() {
+            String res = "";
+            if (this.firstName != null && !this.firstName.equals("")) {
+                res += this.firstName;
+            }
+            if (this.lastName != null && !this.lastName.equals("")) {
+                if(!res.equals("")) {
+                    res += " ";
+                }
+                res += this.lastName;
+            }
+            return res;
+        }
     }
 
     public static class Message {
@@ -280,7 +308,7 @@ public class Chat {
         return false;
     }
     
-    public static Chat load(int chatID) {
+    public static Chat load(int chatID, int userID) {
         Chat res = new Chat();
         Connection con = null;
         Statement st = null;
@@ -295,14 +323,14 @@ public class Chat {
                 res.setChatID(rs.getInt(1));
                 res.setChatOwner(rs.getInt(2));
                 res.setIsGroup((rs.getInt(3) == 1) ? true : false);
-            
-                rs = st.executeQuery("SELECT utc.user_id, p.first_name, p.last_name, p.photo, m.id AS message_id, DATE_FORMAT(m.date, '%d.%m.%Y %H:%i:%s') AS date, m.text FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id JOIN messages m ON m.utc_id=utc.id WHERE chat_id="+chatID+" ORDER BY UNIX_TIMESTAMP(m.date)");
+                
+                rs = st.executeQuery("SELECT utc.user_id, p.first_name, p.last_name, p.photo FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id WHERE utc.chat_id="+chatID+" ORDER BY utc.user_id");
                 while (rs.next()) {
-                    if (!res.getMembers().containsKey(rs.getInt(1))) {
-                        res.getMembers().put(rs.getInt(1), new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
-                    }
-                    
-                    res.getMessages().add(new Message(rs.getInt(5), rs.getString(6), rs.getInt(1), rs.getString(7)));
+                    res.getMembers().put(rs.getInt(1), new Member(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                }
+                rs = st.executeQuery("SELECT utc.user_id, m.id AS message_id, DATE_FORMAT(m.date, '%d.%m.%Y %H:%i:%s') AS date, m.text FROM users_to_chats utc JOIN profiles p ON p.id=utc.user_id JOIN messages m ON m.utc_id=utc.id WHERE chat_id="+chatID+" AND m.date >= (SELECT add_date FROM users_to_chats WHERE user_id="+ userID +" AND chat_id="+chatID+") ORDER BY UNIX_TIMESTAMP(m.date)");
+                while (rs.next()) {
+                    res.getMessages().add(new Message(rs.getInt(2), rs.getString(3), rs.getInt(1), rs.getString(4)));
                 }
             }
             return res;
@@ -338,7 +366,7 @@ public class Chat {
             //проверка существования готового чата
             rs = st.executeQuery("SELECT utc.chat_id FROM users_to_chats utc JOIN (SELECT * FROM users_to_chats WHERE user_id="+ receiverID +") utc2 ON utc.chat_id=utc2.chat_id JOIN chats c ON c.id=utc.chat_id WHERE utc.user_id="+ userID +" AND c.is_group=0");
             if (rs.next()) {
-                return load(rs.getInt(1));
+                return load(rs.getInt(1), userID);
             }
             
             st.executeUpdate("INSERT INTO chats (chat_owner, is_group) VALUES ("+userID+", 0)");
@@ -349,7 +377,7 @@ public class Chat {
                 st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ userID +","+ newChatID +",'"+ date +"')");
                 st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ date +"')");
             
-                return load(newChatID);
+                return load(newChatID, userID);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
