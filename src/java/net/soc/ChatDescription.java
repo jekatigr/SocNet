@@ -20,6 +20,7 @@ public class ChatDescription {
     private String lastMessage;
     private String photoLastMessage;
     private boolean isGroup;
+    private boolean added;
 
     /**
      * @return the receiverName
@@ -150,6 +151,20 @@ public class ChatDescription {
     public void setIsGroup(boolean isGroup) {
         this.isGroup = isGroup;
     }
-    
+
+    /**
+     * @return the added
+     */
+    public boolean isAdded() {
+        return added;
+    }
+
+    /**
+     * @param added the added to set
+     */
+    public void setAdded(boolean added) {
+        this.added = added;
+    }
+
     
 }

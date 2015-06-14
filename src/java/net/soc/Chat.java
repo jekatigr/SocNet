@@ -350,42 +350,62 @@ public class Chat {
         return res;
     }
     
-    public static Chat createOrLoad(int userID, int receiverID) {
+    public static Chat createOrLoad(int userID, int receiverID) throws SQLException {
+        Chat res = null;
         Connection con = null;
-        Statement st = null;
+        Statement st1 = null, st2 = null, st3 = null, st4 = null, st5 = null;
         ResultSet rs = null;
 
         try {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
-            st = (Statement) con.createStatement();
+            con.setAutoCommit(false);
+            
+            st1 = (Statement) con.createStatement();
+            st2 = (Statement) con.createStatement();
+            st3 = (Statement) con.createStatement();
+            st4 = (Statement) con.createStatement();
+            st5 = (Statement) con.createStatement();
+            
             //проверка на существование собеседника
-            rs = st.executeQuery("SELECT * FROM profiles WHERE id="+receiverID);
+            rs = st1.executeQuery("SELECT * FROM profiles WHERE id="+receiverID);
             if (!rs.next()) {
                 return null;
             }
             //проверка существования готового чата
-            rs = st.executeQuery("SELECT utc.chat_id FROM users_to_chats utc JOIN (SELECT * FROM users_to_chats WHERE user_id="+ receiverID +") utc2 ON utc.chat_id=utc2.chat_id JOIN chats c ON c.id=utc.chat_id WHERE utc.user_id="+ userID +" AND c.is_group=0");
+            rs = st2.executeQuery("SELECT utc.chat_id FROM users_to_chats utc JOIN (SELECT * FROM users_to_chats WHERE user_id="+ receiverID +") utc2 ON utc.chat_id=utc2.chat_id JOIN chats c ON c.id=utc.chat_id WHERE utc.user_id="+ userID +" AND c.is_group=0");
             if (rs.next()) {
-                return load(rs.getInt(1), userID);
+                res = load(rs.getInt(1), userID);
+            } else {
+                st3.executeUpdate("INSERT INTO chats (chat_owner, is_group) VALUES ("+userID+", 0)", Statement.RETURN_GENERATED_KEYS);
+                rs = st3.getGeneratedKeys();
+                if (rs.next()) {
+                    int newChatID = rs.getInt(1);
+                    String date = DBConnect.getDateForSQL(Calendar.getInstance().getTime());
+                    st4.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ userID +","+ newChatID +",'"+ date +"')");
+                    st5.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ date +"')");
+
+                    res = load(newChatID, userID);
+                }
+                
             }
             
-            st.executeUpdate("INSERT INTO chats (chat_owner, is_group) VALUES ("+userID+", 0)");
-            rs = st.executeQuery("SELECT id FROM chats WHERE chat_owner="+userID+" ORDER BY id DESC");
-            if (rs.next()) {
-                int newChatID = rs.getInt(1);
-                String date = DBConnect.getDateForSQL(Calendar.getInstance().getTime());
-                st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ userID +","+ newChatID +",'"+ date +"')");
-                st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ date +"')");
+            con.commit();
             
-                return load(newChatID, userID);
-            }
+            return res;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            if (con != null) {
+                con.rollback();
+            }
         } finally {
             try {
                 if (rs != null) { rs.close(); }
-                if (st != null) { st.close(); }
+                if (st1 != null) { st1.close(); }
+                if (st2 != null) { st2.close(); }
+                if (st3 != null) { st3.close(); }
+                if (st4 != null) { st4.close(); }
+                if (st5 != null) { st5.close(); }
                 if (con != null) { con.close(); }
             } catch (SQLException ex) {
                 Logger lgr = Logger.getLogger(Version.class.getName());

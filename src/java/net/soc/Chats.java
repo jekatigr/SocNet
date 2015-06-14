@@ -1,3 +1,5 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -37,7 +39,7 @@ public class Chats {
             DriverManager.registerDriver(new Driver()); //"+ userID +"
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(date,'%d.%m.%Y %H:%i') AS date, concat(p.first_name, \" \", p.last_name) AS name, p.photo, user, text FROM (\n" +
+            rs = st.executeQuery("SELECT chat, is_group, DATE_FORMAT(date,'%d.%m.%Y %H:%i:%s') AS date, concat(p.first_name, \" \", p.last_name) AS name, p.photo, user, text FROM (\n" +
 "SELECT u.user_id as user, u.chat_id as chat, COALESCE(m.date, u.add_date) as date, m.text, c.is_group as is_group FROM users_to_chats u\n" +
 "LEFT JOIN messages m ON m.utc_id = u.id\n" +
 "INNER JOIN chats c ON c.id = u.chat_id\n" +
@@ -50,15 +52,21 @@ public class Chats {
 "ORDER BY UNIX_TIMESTAMP(date) DESC");
             LinkedHashMap<Integer, ChatDescription> chats = new LinkedHashMap<>();
             while (rs.next()) {
-                if (!chats.containsKey(rs.getInt(1))) { //этого чата еще не встречали
+				if (!chats.containsKey(rs.getInt(1))) { //этого чата еще не встречали
                     ChatDescription cd = new ChatDescription();
                     cd.setChatID(rs.getInt(1));
                     cd.setIsGroup(rs.getInt(2) == 1);
-                    rs.getString(7);
+                    cd.setDate(rs.getString(3));
+                    rs.getString(7)
                     if (!rs.wasNull()) {
-                        cd.setDate(rs.getString(3));
                         cd.setLastMessage(rs.getString(7));
                         cd.setPhotoLastMessage(rs.getString(5));
+                        cd.setAdded(true);
+                    }
+                    else {
+                        if (rs.getInt(6) == userID) {
+                            cd.setAdded(true);
+                        }
                     }
                     if (rs.getInt(6) != userID) {
                         cd.setReceiverID(rs.getInt(6));
@@ -71,11 +79,10 @@ public class Chats {
                 } else { //такой чат уже был
                     ChatDescription cd = chats.get(rs.getInt(1));
                     cd.setIsGroup(rs.getInt(2) == 1);
-                    rs.getString(7);
-                    if (!rs.wasNull() && cd.getLastMessage() == null) {
-                        cd.setDate(rs.getString(3));
+                    if (!cd.isAdded()) {
                         cd.setLastMessage(rs.getString(7));
                         cd.setPhotoLastMessage(rs.getString(5));
+                        cd.setAdded(true);
                     }
                     if (rs.getInt(6) != userID) {
                         cd.setReceiverID(rs.getInt(6));
@@ -84,6 +91,7 @@ public class Chats {
                     }
                     cd.increaseMembersCount();
                 }
+				
             }
             list.addAll(chats.values());
         } catch (SQLException ex) {
@@ -101,3 +109,4 @@ public class Chats {
         return list;
     }
 }
+
