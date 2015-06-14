@@ -220,7 +220,7 @@
             
             function askConfirm() {
                 bootbox.dialog({
-                        message: "All private message won't be deleted.",
+                        message: "All private message will be deleted.",
                         title: "Are you sure you want to delete your account?",
                         onEscape: function() {},
                         show: true,

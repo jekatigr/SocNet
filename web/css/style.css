@@ -82,7 +82,10 @@ body { padding-top: 70px; }
     background-color: #f5f5f5;
     cursor: pointer;
 }
-
+.create_group_chat_button_container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .chats_info_container {
     display: inline-table;
 }

@@ -24,7 +24,12 @@
         <!-- Тело документа -->
         <div class="countainer">
             <div class="row col-md-6 col-md-offset-3">
-                <div class="list-group">
+                <div class="list-group chats_container">
+                    <div class="list-group-item create_group_chat_button_item">
+                        <div class="row create_group_chat_button_container"> 
+                            <button class="btn btn-primary col-md-12 create_group_chat_button"><span class="glyphicon glyphicon-plus" aria-hidden="true"> Create new group chat</button>
+                        </div>
+                    </div>    
                 <%
                     if (!chats.isEmpty()) {
                         for(int i = 0; i < chats.size(); i++) {
@@ -60,7 +65,7 @@
                         }
                     } else {
                         %>
-                        <h2 align="center" class="no_messages_title">No chats yet...</h2>
+                        <br><br><h2 align="center" class="no_chats_title">No chats yet...</h2>
                     <%
                     }
                 %>
@@ -76,6 +81,38 @@
                 $('.list-group-item-linkable a, .list-group-item-linkable button')
                 .on('click', function(e) {
                     e.stopPropagation();
+                });
+            });
+            
+            $(".create_group_chat_button").click(function(){
+                $.post("components/create_group_chat.jsp", function(resp) {
+                    var o = $.parseJSON(resp);
+                    if (o.ok === "true") {
+                        $(".no_chats_title").hide();
+                        $('<div class="list-group-item list-group-item-linkable" data-link="chat.jsp?cid='+ o.id +'"> '+
+'	<div class="chats_info_container">                                            '+
+'		<img class="chats_receiver_avatar" src="pic/photos/group.png">            '+
+'		<div class="chats_info_container_name_date">                              '+
+'			<a class="chats_info_name" href="chat.jsp?cid='+ o.id +'">Members: 1</a>        '+
+'			<br>                                                                  '+
+'			<span class="chats_info_date">'+ o.date +'</span>                                 '+
+'		</div>                                                                    '+
+'	</div>                                                                        '+
+'	<div class="chats_last_message_container pull-right">                         '+
+'		<img class="chats_last_message_avatar" src="pic/photos/def.jpg">          '+
+'		<div class="chats_last_message_text_container">No messages yet...</div>   '+
+'	</div>                                                                        '+
+'</div>').insertAfter(".create_group_chat_button_item");
+
+                        $('.list-group-item-linkable').on('click', function() {
+                            window.location.href = $(this).data('link');
+                        });
+
+                        $('.list-group-item-linkable a, .list-group-item-linkable button')
+                        .on('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    }                    
                 });
             });
         </script> 
