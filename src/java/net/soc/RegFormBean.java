@@ -124,8 +124,8 @@ public class RegFormBean {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            st.executeUpdate("INSERT INTO users (login, password) VALUES ('"+ this.getLogin() +"', '"+ AuthBean.md5(this.getLogin() + this.getPass()) +"')");
-            rs = st.executeQuery("SELECT id FROM users WHERE login='" + this.getLogin() + "'");
+            st.executeUpdate("INSERT INTO users (login, password) VALUES ('"+ this.getLogin() +"', '"+ AuthBean.md5(this.getLogin() + this.getPass()) +"')", Statement.RETURN_GENERATED_KEYS);
+            rs = st.getGeneratedKeys();
             if (rs.next()) {
                 this.setId(rs.getInt(1));
                 st.executeUpdate("INSERT INTO profiles (id) VALUES ('"+ this.getId() +"')");

@@ -31,7 +31,6 @@ public class DeleteUserFromChatBean {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
             st = (Statement) con.createStatement();
-            System.out.println("-----"+chatID+"--"+userID+"--"+chatOwner);
             rs = st.executeQuery("SELECT id FROM chats WHERE chat_owner="+ chatOwner +" AND id="+ chatID);
             if (rs.next()) {
                 st.executeUpdate("DELETE FROM users_to_chats WHERE user_id="+ userID +" AND chat_id="+ chatID);

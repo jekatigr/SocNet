@@ -22,30 +22,37 @@ public class AddUserToChatBean {
     private int userToAddID;
     private int chatID;
     
-    public boolean addUserToChat() {
+    public boolean addUserToChat() throws SQLException {
         Connection con = null;
-        Statement st = null;
+        Statement st1 = null, st2 = null;
         ResultSet rs = null;
 
         try {
             DriverManager.registerDriver(new Driver());
             con = (Connection) DriverManager.getConnection(DBConnect.MYSQL_SERVER, DBConnect.MYSQL_USER, DBConnect.MYSQL_PASSWORD);
-            st = (Statement) con.createStatement();
+            con.setAutoCommit(false);
+            st1 = (Statement) con.createStatement();
+            st2 = (Statement) con.createStatement();
             
-            st.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) "
+            st1.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) "
                     + "VALUES ("+ this.getUserToAddID() +
                     ", "+ this.getChatID() +
                     ", '"+ DBConnect.getDateForSQL(Calendar.getInstance().getTime()) +"')");
             
-            st.executeUpdate("UPDATE chats SET is_group='1' WHERE id="+ chatID);
+            st2.executeUpdate("UPDATE chats SET is_group='1' WHERE id="+ chatID);
             
+            con.commit();
             return true;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            if (con != null) {
+                con.rollback();
+            }
         } finally {
             try {
                 if (rs != null) { rs.close(); }
-                if (st != null) { st.close(); }
+                if (st1 != null) { st1.close(); }
+                if (st2 != null) { st2.close(); }
                 if (con != null) { con.close(); }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());

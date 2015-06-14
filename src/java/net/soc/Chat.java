@@ -384,8 +384,8 @@ public class Chat {
                     String date = DBConnect.getDateForSQL(Calendar.getInstance().getTime());
                     st4.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ userID +","+ newChatID +",'"+ date +"')");
                     st5.executeUpdate("INSERT INTO users_to_chats (user_id, chat_id, add_date) VALUES ("+ receiverID +","+ newChatID +",'"+ date +"')");
-
-                    res = load(newChatID, userID);
+                    con.commit();
+                    return load(newChatID, userID);
                 }
                 
             }
